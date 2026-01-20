@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Hệ thống chấm công bằng khuôn mặt</title>
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome (icon) -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #333;
+      }
+
+      .container {
+        background: #ffffff;
+        width: 420px;
+        padding: 40px 35px;
+        border-radius: 18px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        text-align: center;
+      }
+
+      .logo {
+        width: 90px;
+        height: 90px;
+        border-radius: 50%;
+        margin-bottom: 15px;
+        border: 3px solid #007bff;
+      }
+
+      h1 {
+        font-size: 22px;
+        font-weight: 700;
+        color: #0f3c78;
+        margin-bottom: 8px;
+      }
+
+      .subtitle {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 30px;
+      }
+
+      .actions {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      button {
+        width: 100%;
+        padding: 14px;
+        border-radius: 10px;
+        border: none;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+      }
+
+      .btn-register {
+        background: linear-gradient(135deg, #6a11cb, #2575fc);
+        color: white;
+      }
+
+      .btn-register:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(106, 17, 203, 0.4);
+      }
+
+      .btn-recognize {
+        background: linear-gradient(135deg, #11998e, #38ef7d);
+        color: white;
+      }
+
+      .btn-recognize:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(17, 153, 142, 0.4);
+      }
+
+      .btn-camera {
+        background: linear-gradient(135deg, #ff512f, #dd2476);
+        color: white;
+      }
+
+      .btn-camera:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(221, 36, 118, 0.4);
+      }
+
+      .footer {
+        margin-top: 25px;
+        font-size: 12px;
+        color: #999;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <img
+        src="{{ url_for('static', filename='logo.png') }}"
+        alt="Logo hệ thống"
+        class="logo"
+      />
+
+      <h1>Hệ thống chấm công</h1>
+      <div class="subtitle">
+        Nhận diện khuôn mặt • Tự động • Chính xác
+      </div>
+
+      <div class="actions">
+        <form method="GET" action="/register">
+          <button type="submit" class="btn-register">
+            <i class="fa-solid fa-brain"></i>
+            Đăng ký nhân viên mới
+          </button>
+        </form>
+
+        <form method="GET" action="/recognize">
+          <button type="submit" class="btn-recognize">
+            <i class="fa-solid fa-user-check"></i>
+            Upload ảnh để chấm công
+          </button>
+        </form>
+
+        <a href="{{ url_for('camera') }}" style="text-decoration: none">
+          <button class="btn-camera">
+            <i class="fa-solid fa-video"></i>
+            Mở camera để chấm công
+          </button>
+        </a>
+      </div>
+
+      <div class="footer">
+        © 2026 Face Attendance System
+      </div>
+    </div>
+  </body>
+</html>

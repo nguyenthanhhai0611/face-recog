@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Đăng ký khuôn mặt mới</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            width: 420px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        h2 {
+            margin-bottom: 15px;
+        }
+
+        input {
+            width: 90%;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        video, canvas {
+            width: 100%;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-capture {
+            background: #3498db;
+            color: white;
+        }
+
+        .btn-train {
+            background: #2ecc71;
+            color: white;
+        }
+
+        .count {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Đăng ký khuôn mặt mới</h2>
+
+    <input type="text" id="name" placeholder="Nhập tên nhân viên">
+
+    <video id="video" autoplay></video>
+    <canvas id="canvas" style="display:none;"></canvas>
+
+    <button class="btn-capture" type="button" onclick="captureImage()">📸 Chụp ảnh</button>
+    <div class="count">Số ảnh đã chụp: <span id="count">0</span></div>
+
+    <form action="/train" method="POST">
+        <button class="btn-train" type="submit">Đăng ký</button>
+    </form>
+</div>
+
+<script>
+    const video = document.getElementById('video');
+    const canvas = document.getElementById('canvas');
+    const nameInput = document.getElementById('name');
+    const countSpan = document.getElementById('count');
+
+    let count = 0;
+
+    // 🔹 Mở camera
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream;
+        })
+        .catch(err => {
+            alert("Không thể mở camera: " + err);
+        });
+
+    // 🔹 Chụp ảnh & gửi về server
+    function captureImage() {
+        if (!nameInput.value.trim()) {
+            alert("Vui lòng nhập tên nhân viên");
+            return;
+        }
+
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        canvas.getContext('2d').drawImage(video, 0, 0);
+
+        const imageData = canvas.toDataURL('image/jpeg');
+
+        fetch('/capture', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                name: nameInput.value.trim(),
+                image: imageData
+            })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                count++;
+                countSpan.innerText = count;
+            } else {
+                alert(data.message || "Lỗi khi lưu ảnh");
+            }
+        })
+        .catch(err => {
+            alert("Lỗi kết nối server");
+            console.error(err);
+        });
+    }
+</script>
+
+</body>
+</html>

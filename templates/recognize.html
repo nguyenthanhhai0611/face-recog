@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Chấm công bằng ảnh khuôn mặt</title>
+
+    <!-- Google Font -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Font Awesome -->
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    />
+
+    <style>
+      body {
+        margin: 0;
+        font-family: "Inter", sans-serif;
+        background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+        min-height: 100vh;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .container {
+        background: #ffffff;
+        padding: 35px 45px;
+        border-radius: 18px;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+        text-align: center;
+        max-width: 620px;
+        width: 100%;
+      }
+
+      h2 {
+        color: #0f3c78;
+        font-weight: 700;
+        margin-bottom: 8px;
+      }
+
+      .subtitle {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 25px;
+      }
+
+      .upload-box {
+        border: 2px dashed #007bff;
+        border-radius: 12px;
+        padding: 25px;
+        margin-bottom: 20px;
+      }
+
+      input[type="file"] {
+        font-size: 15px;
+        margin-top: 10px;
+      }
+
+      button {
+        background: linear-gradient(135deg, #11998e, #38ef7d);
+        color: white;
+        padding: 14px 24px;
+        margin-top: 15px;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        font-size: 15px;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+      }
+
+      button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 20px rgba(17, 153, 142, 0.4);
+      }
+
+      img {
+        margin-top: 20px;
+        max-width: 100%;
+        max-height: 380px;
+        object-fit: contain;
+        border-radius: 12px;
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+      }
+
+      .result-title {
+        margin-top: 25px;
+        font-weight: 600;
+        color: #333;
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin-top: 10px;
+      }
+
+      li {
+        background: #f4f8ff;
+        margin: 8px 0;
+        padding: 10px 15px;
+        border-radius: 8px;
+        font-weight: 500;
+        color: #004aad;
+      }
+
+      .back {
+        text-decoration: none;
+        color: #007bff;
+        font-weight: 600;
+        display: inline-block;
+        margin-top: 25px;
+      }
+
+      .back:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h2>Chấm công bằng ảnh khuôn mặt</h2>
+      <div class="subtitle">
+        Tải ảnh nhân viên để hệ thống tự động nhận diện và ghi nhận chấm công
+      </div>
+
+      <form method="POST" action="/recognize" enctype="multipart/form-data">
+        <div class="upload-box">
+          <i class="fa-solid fa-cloud-arrow-up fa-2x" style="color:#007bff;"></i>
+          <br /><br />
+          <label><strong>Chọn ảnh khuôn mặt nhân viên</strong></label><br />
+          <input type="file" name="image" accept="image/*" required />
+        </div>
+
+        <button type="submit">
+          <i class="fa-solid fa-user-check"></i>
+          Xác nhận chấm công
+        </button>
+      </form>
+
+      {% if result_image %}
+      <div class="result-title">
+        <i class="fa-solid fa-clipboard-check"></i>
+        Kết quả chấm công
+      </div>
+
+      <img
+        src="{{ url_for('static', filename='uploads/result.jpg') }}"
+        alt="Kết quả nhận diện"
+      />
+
+      {% if distances %}
+      <ul>
+        {% for item in distances %}
+        <li>{{ item }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
+      {% endif %}
+
+      <a class="back" href="{{ url_for('index') }}">
+        ← Quay lại trang quản lý chấm công
+      </a>
+    </div>
+  </body>
+</html>
